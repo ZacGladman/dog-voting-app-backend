@@ -1,8 +1,6 @@
-DROP TABLE IF EXISTS food;
+DROP TABLE IF EXISTS leaderboard;
 
-CREATE TABLE  food (
-    id          serial PRIMARY KEY,
-    title       varchar(40) NOT NULL
+CREATE TABLE  leaderboard (
+    name          varchar PRIMARY KEY,
+    votes       integer default 0
 );
-
-INSERT INTO food (title) VALUES ('sourdough'), ('olive oil'), ('pizza'), ('picanha'), ('gorgonzola'), ('basil');
