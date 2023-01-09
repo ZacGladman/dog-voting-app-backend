@@ -26,6 +26,18 @@ app.get("/leaderboard", async (req, res) => {
     res.status(500);
   }
 });
+
+app.post<{}, {}, { breed: string }>("/leaderboard", async (req, res) => {
+  try {
+    const query =
+      "INSERT INTO leaderboard (breed) VALUES ($1) ON CONFLICT DO NOTHING RETURNING *";
+    const values = req.body.breed;
+    const response = await client.query(query, [values]);
+    res.status(200).json(response.rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500);
+  }
 });
 
 app.get("/health-check", async (req, res) => {
