@@ -40,15 +40,16 @@ app.post<{}, {}, { breed: string }>("/leaderboard", async (req, res) => {
   }
 });
 
-app.get("/health-check", async (req, res) => {
+app.put<{ breed: string }>("/leaderboard/:breed", async (req, res) => {
   try {
-    //For this to be successful, must connect to db
-    await client.query("select now()");
-    res.status(200).send("system ok");
+    const breed = req.params.breed;
+    const query =
+      "UPDATE leaderboard SET votes = votes + 1 WHERE breed = $1 RETURNING *";
+    const response = await client.query(query, [breed]);
+    res.status(200).json(response.rows[0]);
   } catch (error) {
-    //Recover from error rather than letting system halt
     console.error(error);
-    res.status(500).send("An error occurred. Check server logs.");
+    res.status(500);
   }
 });
 
